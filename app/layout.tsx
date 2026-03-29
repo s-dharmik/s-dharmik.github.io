@@ -1,14 +1,14 @@
 import { Pirata_One, Roboto } from "next/font/google";
 import "./globals.css";
 
-// 1. The Heavy Typewriter Font (For your name)
+// 1. The Heavy Typewriter Font 
 const specialElite = Pirata_One({ 
   weight: '400',
   subsets: ["latin"],
   variable: '--font-playfair' // Keeping the variable name the same so Tailwind doesn't break
 });
 
-// 2. The Clean Typewriter Font (For small text)
+// 2. The Clean Typewriter Font 
 const courier = Roboto({ 
   weight: ['400', '700'],
   subsets: ["latin"],
