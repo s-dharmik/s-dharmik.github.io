@@ -2,27 +2,30 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Archive, BookOpen, Map, Shield, ArrowRight, Lock } from "lucide-react";
+import { Archive, BookOpen, Map, Shield, ArrowRight, Lock, MapPin, Mail, ShieldCheck } from "lucide-react";
 
 export default function Home() {
   return (
     <div className="bg-[#131313] text-[#e5e2e1] font-mono selection:bg-[#8b0000] selection:text-[#ff907f] min-h-screen overflow-x-hidden">
 
-    
+
 
       {/* --- TOP NAV BAR --- */}
       <nav className="fixed top-0 w-full bg-[#131313]/80 backdrop-blur-md z-50 flex justify-between items-center px-8 md:px-12 py-6 border-b border-[#5a403c]/20">
         <div className="font-serif text-3xl tracking-wider text-[#ffb4a8] camelcase">
-          Dharmik Savaliya
+          <a href="#">Dharmik Savaliya</a>
         </div>
         <div className="hidden md:flex items-center gap-12">
-          <a href="#" className="text-[#e9c349] border-b-2 border-[#af8d11] pb-1 font-bold text-sm tracking-widest uppercase">Archive</a>
-          <a href="#" className="text-[#e5e2e1] opacity-70 hover:opacity-100 hover:text-[#e9c349] transition-all duration-500 text-sm tracking-widest uppercase">Contracts</a>
-          <a href="#" className="text-[#e5e2e1] opacity-70 hover:opacity-100 hover:text-[#e9c349] transition-all duration-500 text-sm tracking-widest uppercase">Meetings</a>
+          {/* Note: If you want Archive to scroll, add id="archive" to the Archive section below */}
+          <a href="#archive" className="text-[#e9c349] border-b-2 border-[#af8d11] pb-1 font-bold text-sm tracking-widest uppercase">Archive</a>
+          <a href="#family" className="text-[#e5e2e1] opacity-70 hover:opacity-100 hover:text-[#e9c349] transition-all duration-500 text-sm tracking-widest uppercase">The Family</a>
+          <a href="#contact" className="text-[#e5e2e1] opacity-70 hover:opacity-100 hover:text-[#e9c349] transition-all duration-500 text-sm tracking-widest uppercase">Contracts</a>
         </div>
-        <button className="bg-[#8b0000] text-[#ffdad4] hover:bg-[#920703] px-8 py-2 text-sm font-bold tracking-[0.2em] transition-all active:scale-95 uppercase">
-          Contact
-        </button>
+        <a href="#contact">
+          <button className="bg-[#8b0000] text-[#ffdad4] hover:bg-[#920703] px-8 py-2 text-sm font-bold tracking-[0.2em] transition-all active:scale-95 uppercase">
+            Contact
+          </button>
+        </a>
       </nav>
 
 
@@ -93,7 +96,7 @@ export default function Home() {
               transition={{ duration: 1, delay: 0.5 }}
               className="max-w-md border-l-4 border-[#8b0000] pl-8 py-4 bg-[#0e0e0e]/40 backdrop-blur-sm mt-4">
               <p className="text-[#e5e2e1]/80 text-lg leading-relaxed font-light italic">
-                {`"I'm gonna make them an offer they can't refuse. My code is the ledger of problems solved and systems built."`}
+                {`"I build systems thet can rely on. My code is the ledger of secure APIs, clean architecture, and unbreakable backends."`}
               </p>
             </motion.div>
 
@@ -151,7 +154,7 @@ export default function Home() {
 
 
       {/* --- THE ARCHIVE (BENTO GRID) --- */}
-      <section className="relative z-20 w-full max-w-7xl mx-auto px-12 md:px-24 py-32 pl-20 md:pl-32">
+      <section id="archive" className="relative z-20 w-full max-w-7xl mx-auto px-12 md:px-24 py-32 pl-20 md:pl-32">
 
         {/* Section Header */}
         <header className="mb-16 flex flex-col md:flex-row justify-between items-end gap-8">
@@ -309,7 +312,246 @@ export default function Home() {
 
 
 
-      {/* THE BACKSTORY - ABOUT ME SECTION */}
+
+
+      {/* --- THE BACKSTORY (ABOUT ME) --- */}
+      <section id="family" className="relative w-full overflow-hidden py-32 border-t border-[#5a403c]/20">
+        <div className="max-w-7xl mx-auto px-12 md:px-24 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+
+          {/* Left Content: The Narrative */}
+          <div className="lg:col-span-7 flex flex-col z-10">
+            <motion.h2
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1 }}
+              className="font-serif text-6xl md:text-8xl text-[#e9c349] tracking-tight uppercase mb-8"
+            >
+              The Backstory
+            </motion.h2>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.2 }}
+              className="max-w-xl space-y-8"
+            >
+              <p className="text-xl md:text-2xl font-light leading-relaxed text-[#e5e2e1]/90 italic border-l-2 border-[#8b0000] pl-6">
+                "Architecture, design, and strategy are the three pillars of my operation. Every microservice is a calculated move; every API endpoint is a signed contract."
+              </p>
+
+              <p className="text-lg leading-relaxed text-[#e5e2e1]/70 font-mono">
+                My foundation spans from Gujarat to Paderborn. I specialize in Java, Spring Boot, and enterprise-level system architecture. From developing AI-driven security plugins for SonarQube to optimizing CMMS backends at LIRA Service GmbH, I don't just write code—I build leverage. My role is simple: I am the shadow that ensures the system never fails.
+              </p>
+
+              {/* Key Stats Bento Grid */}
+              <div className="grid grid-cols-2 gap-px bg-[#5a403c]/30 mt-12">
+                <div className="p-8 bg-[#1c1b1b] hover:bg-[#201f1f] transition-colors">
+                  <div className="font-serif text-5xl text-[#e9c349]">M.Sc.</div>
+                  <div className="text-[10px] tracking-[0.3em] uppercase mt-2 text-[#e5e2e1]/40 font-mono">PADERBORN UNIVERSITY</div>
+                </div>
+                <div className="p-8 bg-[#1c1b1b] hover:bg-[#201f1f] transition-colors">
+                  <div className="font-serif text-5xl text-[#e9c349]">LIRA Service</div>
+                  <div className="text-[10px] tracking-[0.3em] uppercase mt-2 text-[#e5e2e1]/40 font-mono">SOFTWARE ENGINEER</div>
+                </div>
+                <div className="p-8 bg-[#1c1b1b] hover:bg-[#201f1f] transition-colors">
+                  <div className="font-serif text-5xl text-[#e9c349]">SecAI</div>
+                  <div className="text-[10px] tracking-[0.3em] uppercase mt-2 text-[#e5e2e1]/40 font-mono">SECURITY INTEGRATION</div>
+                </div>
+                <div className="p-8 bg-[#1c1b1b] hover:bg-[#201f1f] transition-colors">
+                  <div className="font-serif text-5xl text-[#e9c349]">OMERTÀ</div>
+                  <div className="text-[10px] tracking-[0.3em] uppercase mt-2 text-[#e5e2e1]/40 font-mono">CLEAN ARCHITECTURE</div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right Side: The Portrait */}
+          <motion.div
+            initial={{ opacity: 0, filter: "blur(10px)" }}
+            whileInView={{ opacity: 1, filter: "blur(0px)" }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5 }}
+            className="lg:col-span-5 relative h-[600px] w-full border border-[#5a403c]/20"
+          >
+            <Image
+              src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1000&auto=format&fit=crop"
+              alt="The Strategist"
+              fill
+              className="object-cover grayscale brightness-75 contrast-125"
+            />
+            {/* Overlay Gradient for blending */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#131313] to-transparent lg:bg-gradient-to-r"></div>
+          </motion.div>
+
+        </div>
+      </section>
+
+
+
+
+
+
+
+      {/* --- MAKE AN OFFER (CONTACT) --- */}
+      <section id="contact" className="relative z-20 w-full max-w-7xl mx-auto px-12 md:px-24 py-32 pl-24 md:pl-32">
+
+        {/* Header Section */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-end mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+            className="md:col-span-8"
+          >
+            <h2 className="font-serif text-7xl md:text-9xl leading-none text-[#e9c349] tracking-tighter camelcase">
+              Make An Offer
+            </h2>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="md:col-span-4 text-right"
+          >
+            <p className="font-light italic text-xl md:text-2xl text-[#e5e2e1]/80 leading-snug">
+              {`"I'm gonna make them an offer they can't refuse."`}
+            </p>
+            <div className="h-1 w-24 bg-[#8b0000] ml-auto mt-6"></div>
+          </motion.div>
+        </div>
+
+        {/* Layout Grid: Form vs Info */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+
+          {/* Information Column (The Whisper) */}
+          <div className="lg:col-span-4 space-y-16">
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.2 }}
+              className="space-y-6"
+            >
+              <h3 className="font-mono text-xs tracking-[0.3em] text-[#e9c349] uppercase opacity-60 flex items-center gap-3">
+                <MapPin className="w-4 h-4" /> Territory
+              </h3>
+              <div className="space-y-2">
+                <p className="text-2xl font-light text-[#e5e2e1]">Paderborn, NRW</p>
+                <p className="text-[#e5e2e1]/60 font-mono text-sm">Germany</p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.4 }}
+              className="space-y-6"
+            >
+              <h3 className="font-mono text-xs tracking-[0.3em] text-[#e9c349] uppercase opacity-60 flex items-center gap-3">
+                <Mail className="w-4 h-4" /> The Frequency
+              </h3>
+              <div className="space-y-2">
+                <p className="text-xl md:text-2xl font-light text-[#e5e2e1] underline decoration-[#8b0000] decoration-2 underline-offset-8">
+                  secure@dsavaliya.dev
+                </p>
+                <p className="text-[#e5e2e1]/60 font-mono text-sm mt-4">Priority response for active contracts.</p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, filter: "blur(10px)" }}
+              whileInView={{ opacity: 1, filter: "blur(0px)" }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.6 }}
+              className="relative group pt-12 hidden md:block"
+            >
+              <div className="aspect-[4/5] bg-[#1c1b1b] overflow-hidden relative">
+                <Image
+                  src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=800&auto=format&fit=crop"
+                  alt="Secure Server"
+                  fill
+                  className="object-cover grayscale opacity-40 group-hover:opacity-60 transition-opacity duration-700"
+                />
+              </div>
+              <div className="absolute -bottom-4 -right-4 p-6 bg-[#0e0e0e] border border-[#5a403c]/30">
+                <ShieldCheck className="w-10 h-10 text-[#e9c349]" />
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Contact Form (The Protocol) */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.4 }}
+            className="lg:col-span-8 bg-[#0e0e0e] p-8 md:p-16 border-l border-[#5a403c]/20"
+          >
+            <form className="space-y-12" onSubmit={(e) => e.preventDefault()}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+
+                {/* Field: The Name */}
+                <div className="space-y-2 group relative">
+                  <label className="font-mono text-xs tracking-widest text-[#e5e2e1]/40 uppercase group-focus-within:text-[#e9c349] transition-colors">The Name</label>
+                  <input
+                    type="text"
+                    placeholder="WHO IS ASKING?"
+                    className="w-full bg-transparent border-t-0 border-x-0 border-b border-[#5a403c]/30 py-4 focus:ring-0 focus:border-[#e9c349] transition-all placeholder:text-[#e5e2e1]/10 uppercase tracking-widest text-lg outline-none text-[#e5e2e1]"
+                  />
+                </div>
+
+                {/* Field: The Contact */}
+                <div className="space-y-2 group relative">
+                  <label className="font-mono text-xs tracking-widest text-[#e5e2e1]/40 uppercase group-focus-within:text-[#e9c349] transition-colors">The Contact</label>
+                  <input
+                    type="email"
+                    placeholder="WHERE DO WE REACH YOU?"
+                    className="w-full bg-transparent border-t-0 border-x-0 border-b border-[#5a403c]/30 py-4 focus:ring-0 focus:border-[#e9c349] transition-all placeholder:text-[#e5e2e1]/10 uppercase tracking-widest text-lg outline-none text-[#e5e2e1]"
+                  />
+                </div>
+              </div>
+
+              {/* Field: The Business */}
+              <div className="space-y-2 group relative">
+                <label className="font-mono text-xs tracking-widest text-[#e5e2e1]/40 uppercase group-focus-within:text-[#e9c349] transition-colors">The Business</label>
+                <textarea
+                  rows={4}
+                  placeholder="WHAT IS YOUR PROPOSITION?"
+                  className="w-full bg-transparent border-t-0 border-x-0 border-b border-[#5a403c]/30 py-4 focus:ring-0 focus:border-[#e9c349] transition-all placeholder:text-[#e5e2e1]/10 uppercase tracking-widest text-lg resize-none outline-none text-[#e5e2e1]"
+                ></textarea>
+              </div>
+
+              <div className="pt-8 flex flex-col xl:flex-row items-center justify-between gap-8">
+                <div className="flex items-center gap-4 text-[#e5e2e1]/40 text-xs tracking-widest font-mono">
+                  <ShieldCheck className="text-[#8b0000] w-5 h-5" />
+                  ENCRYPTED VIA OMERTA PROTOCOL
+                </div>
+                <button type="submit" className="w-full xl:w-auto px-12 py-5 bg-[#8b0000] text-[#e5e2e1] font-mono font-bold tracking-[0.2em] uppercase hover:bg-[#a30000] transition-colors active:scale-95">
+                  Submit Proposition
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* --- FOOTER --- */}
+      <footer className="relative z-50 w-full bg-[#0e0e0e] border-t border-[#5a403c]/20 py-8 px-12 md:pl-32 flex flex-col md:flex-row justify-between items-center gap-6 mt-20">
+        <div className="font-mono text-xs tracking-widest text-[#e5e2e1]/40 uppercase">
+          © {new Date().getFullYear()} D. SAVALIYA. ALL RIGHTS RESERVED.
+        </div>
+        <div className="flex gap-8">
+          <a href="#" className="font-mono text-xs tracking-widest text-[#e5e2e1]/40 hover:text-[#e9c349] transition-colors uppercase">GitHub</a>
+          <a href="#" className="font-mono text-xs tracking-widest text-[#e5e2e1]/40 hover:text-[#e9c349] transition-colors uppercase">LinkedIn</a>
+          <a href="#" className="font-mono text-xs tracking-widest text-[#e5e2e1]/40 hover:text-[#e9c349] transition-colors uppercase">Clearance</a>
+        </div>
+      </footer>
 
 
     </div>
