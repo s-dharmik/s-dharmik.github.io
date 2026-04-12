@@ -1,77 +1,175 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Archive, BookOpen, Shield, ArrowRight, Lock, MapPin, Mail, ShieldCheck, X } from "lucide-react";
 import Image from "next/image";
-import { Archive, BookOpen, Map, Shield, ArrowRight, Lock, MapPin, Mail, ShieldCheck } from "lucide-react";
+import { siteConfig } from "./config/site";
+
+// --- DOSSIER DATA DICTIONARY ---
+// This holds the data for your modals so we don't clutter the HTML
+type DossierKey = "secai" | "sams" | "mern" | "neural" | "lira";
+
+const dossierData: Record<DossierKey, { title: string, objective: string, execution: string, image: string, isNDA: boolean, codeLink?: string, liveLink?: string }> = {
+  secai: {
+    title: "SecAI Integration",
+    objective: "Developed an AI-driven plugin for SonarQube integrating the Cognicrypt SAST tool to detect and explain security vulnerabilities in source code. Implemented Quick Fix and Pull Request automation to bridge analysis results with real-world developer workflows.",
+    execution: "Java, React.js, Docker, SonarQube, Ubuntu, GitHub, VM, CI/CD. Designed automated test scenarios using JUnit5, achieving 57% backend code coverage.",
+    image: "/project-images/secai.webp",
+    isNDA: false,
+    codeLink: "https://github.com/secure-software-engineering/SonarQubePlugin",
+  },
+  sams: {
+    title: "Smart S.A.M.S.",
+    objective: "Developed a dual-application ecosystem to automate attendance tracking. Built one portal for system administration and another for faculty/student daily use, achieving 60% higher tracking accuracy over manual methods.",
+    execution: "Android, Java, PHP, Google Firebase, MySQL, phpMyAdmin. Hosted via Hostinger.",
+    image: "/project-images/smart-sams.webp",
+    isNDA: false,
+    codeLink: "https://github.com/s-dharmik/Smart-SAMS",
+  },
+  mern: {
+    title: "The MERN Network",
+    objective: "Engineered a full-stack web application designed for secure content publication. Implemented strict JWT (JSON Web Token) authentication to manage user sessions and protect API routes.",
+    execution: "MongoDB, ExpressJS, React, NodeJS. Full CRUD operations locked behind authenticated sessions.",
+    image: "/project-images/mern.webp",
+    isNDA: false,
+    codeLink: "https://github.com/s-dharmik/MERN_Blog_app",
+  },
+  neural: {
+    title: "Neural Argumentation",
+    objective: "Built a machine learning system capable of extracting and identifying foremost arguments from unstructured dataset corpuses. Executed data splitting, argument mining, and quality assessment.",
+    execution: "Python, Pandas, NumPy, NLTK (Natural Language Toolkit). Algorithm achieved an accuracy rate exceeding 80%.",
+    image: "/project-images/neural-nets.webp",
+    isNDA: false,
+    codeLink: "https://github.com/s-dharmik/Argumentation-using-Neural-Nets",
+  },
+  lira: {
+    title: "LIRA Service GmbH",
+    objective: "Designed and improved enterprise Java-based backend components. Identified workflow delays and implemented real-time, barcode-based asset handling to reduce task handling time by 10 minutes per session.",
+    execution: "Java, Spring Boot, SQL, Oracle, JPA, SWT, Android Studio, Eclipse. Secured REST APIs for mobile-to-backend communication, contributing to a 40% increase in active system usage.",
+    image: "/project-images/lira_service.png",
+    isNDA: true,
+  }
+};
 
 export default function Home() {
+  const [activeDossier, setActiveDossier] = useState<DossierKey | null>(null);
+
+  // Helper to grab the currently active data safely
+  const activeData = activeDossier ? dossierData[activeDossier] : null;
+
+
+  const [activeSection, setActiveSection] = useState("hero_page");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ["hero_page", "archive", "family", "contact"];
+      let current = "hero_page";
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= 300) {
+            current = section;
+          }
+        }
+      }
+      setActiveSection(current);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+    e.preventDefault();
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+
   return (
     <div className="bg-[#131313] text-[#e5e2e1] font-mono selection:bg-[#8b0000] selection:text-[#ff907f] min-h-screen overflow-x-hidden">
 
-
-
       {/* --- TOP NAV BAR --- */}
       <nav className="fixed top-0 w-full bg-[#131313]/80 backdrop-blur-md z-50 flex justify-between items-center px-8 md:px-12 py-6 border-b border-[#5a403c]/20">
+
+        {/* Left: The Brand */}
         <div className="font-serif text-3xl tracking-wider text-[#ffb4a8] camelcase">
-          <a href="#">Dharmik Savaliya</a>
+          <a href="#home_page">{siteConfig.name}</a>
         </div>
-        <div className="hidden md:flex items-center gap-12">
-          {/* Note: If you want Archive to scroll, add id="archive" to the Archive section below */}
-          <a href="#archive" className="text-[#e9c349] border-b-2 border-[#af8d11] pb-1 font-bold text-sm tracking-widest uppercase">Archive</a>
-          <a href="#family" className="text-[#e5e2e1] opacity-70 hover:opacity-100 hover:text-[#e9c349] transition-all duration-500 text-sm tracking-widest uppercase">The Family</a>
-          <a href="#contact" className="text-[#e5e2e1] opacity-70 hover:opacity-100 hover:text-[#e9c349] transition-all duration-500 text-sm tracking-widest uppercase">Contracts</a>
-        </div>
+
         <a href="#contact">
-          <button className="bg-[#8b0000] text-[#ffdad4] hover:bg-[#920703] px-8 py-2 text-sm font-bold tracking-[0.2em] transition-all active:scale-95 uppercase">
+          <button className="bg-[#8b0000] text-[#ffdad4] hover:bg-[#920703] px-8 py-2 text-sm font-bold tracking-[0.2em] transition-all active:scale-95 uppercase font-mono">
             Contact
           </button>
         </a>
+
       </nav>
 
-
-
-
-      {/* --- SIDE NAV BAR (Hover to Expand) --- */}
+      {/* --- SIDE NAV BAR (Dynamic Scroll Spy) --- */}
       <aside className="fixed left-0 top-0 h-full z-40 flex flex-col bg-[#0e0e0e] w-20 hover:w-64 transition-all duration-500 group border-r border-[#5a403c]/15 overflow-hidden">
         <div className="flex flex-col h-full py-32 gap-8">
-          <a href="#" className="flex items-center px-6 gap-4 group-hover:pl-8 transition-all duration-300">
-            <Archive className="text-[#e9c349] w-6 h-6 shrink-0" />
-            <span className="opacity-0 group-hover:opacity-100 text-xs font-bold tracking-widest uppercase text-[#e9c349] whitespace-nowrap transition-opacity duration-300 delay-100">The Vault</span>
+          <a
+            href="#hero_page"
+            onClick={(e) => scrollToSection(e, "hero_page")}
+            className="flex items-center px-6 gap-4 group-hover:pl-8 transition-all duration-300">
+            <Shield className={`${activeSection === "hero_page" ? "text-[#e9c349]" : "text-[#e5e2e1]/50"} w-6 h-6 shrink-0 hover:text-[#e9c349] transition-colors`} />
+            <span className={`opacity-0 group-hover:opacity-100 text-xs font-bold tracking-widest uppercase whitespace-nowrap transition-all duration-300 delay-100 ${activeSection === "hero_page" ? "text-[#e9c349]" : "text-[#e5e2e1]/50"}`}>
+              Command
+            </span>
           </a>
-          <a href="#" className="flex items-center px-6 gap-4 group-hover:pl-8 transition-all duration-300">
-            <BookOpen className="text-[#e5e2e1]/50 w-6 h-6 shrink-0 hover:text-[#e9c349] transition-colors" />
-            <span className="opacity-0 group-hover:opacity-100 text-xs font-bold tracking-widest uppercase text-[#e5e2e1]/50 whitespace-nowrap transition-opacity duration-300 delay-100">Dossiers</span>
+
+          <a
+            href="#archive"
+            onClick={(e) => scrollToSection(e, "archive")}
+            className="flex items-center px-6 gap-4 group-hover:pl-8 transition-all duration-300">
+            <Archive className={`${activeSection === "archive" ? "text-[#e9c349]" : "text-[#e5e2e1]/50"} w-6 h-6 shrink-0 hover:text-[#e9c349] transition-colors`} />
+            <span className={`opacity-0 group-hover:opacity-100 text-xs font-bold tracking-widest uppercase whitespace-nowrap transition-all duration-300 delay-100 ${activeSection === "archive" ? "text-[#e9c349]" : "text-[#e5e2e1]/50"}`}>
+              The Vault
+            </span>
           </a>
-          <a href="#" className="flex items-center px-6 gap-4 group-hover:pl-8 transition-all duration-300">
-            <Map className="text-[#e5e2e1]/50 w-6 h-6 shrink-0 hover:text-[#e9c349] transition-colors" />
-            <span className="opacity-0 group-hover:opacity-100 text-xs font-bold tracking-widest uppercase text-[#e5e2e1]/50 whitespace-nowrap transition-opacity duration-300 delay-100">Territories</span>
+
+          <a
+            href="#family"
+            onClick={(e) => scrollToSection(e, "family")}
+            className="flex items-center px-6 gap-4 group-hover:pl-8 transition-all duration-300">
+            <BookOpen className={`${activeSection === "family" ? "text-[#e9c349]" : "text-[#e5e2e1]/50"} w-6 h-6 shrink-0 hover:text-[#e9c349] transition-colors`} />
+            <span className={`opacity-0 group-hover:opacity-100 text-xs font-bold tracking-widest uppercase whitespace-nowrap transition-all duration-300 delay-100 ${activeSection === "family" ? "text-[#e9c349]" : "text-[#e5e2e1]/50"}`}>
+              Backstory
+            </span>
           </a>
-          <a href="#" className="flex items-center px-6 gap-4 group-hover:pl-8 transition-all duration-300">
-            <Shield className="text-[#e5e2e1]/50 w-6 h-6 shrink-0 hover:text-[#e9c349] transition-colors" />
-            <span className="opacity-0 group-hover:opacity-100 text-xs font-bold tracking-widest uppercase text-[#e5e2e1]/50 whitespace-nowrap transition-opacity duration-300 delay-100">Omertà</span>
+
+          <a
+            href="#contact"
+            onClick={(e) => scrollToSection(e, "contact")}
+            className="flex items-center px-6 gap-4 group-hover:pl-8 transition-all duration-300">
+            <MapPin className={`${activeSection === "contact" ? "text-[#e9c349]" : "text-[#e5e2e1]/50"} w-6 h-6 shrink-0 hover:text-[#e9c349] transition-colors`} />
+            <span className={`opacity-0 group-hover:opacity-100 text-xs font-bold tracking-widest uppercase whitespace-nowrap transition-all duration-300 delay-100 ${activeSection === "contact" ? "text-[#e9c349]" : "text-[#e5e2e1]/50"}`}>
+              Contracts
+            </span>
           </a>
+
         </div>
       </aside>
 
-
-
-
       {/* --- MAIN HERO SECTION --- */}
-      <main className="relative min-h-screen w-full flex items-center pt-20 pl-20">
+      <main id="home_page" className="relative min-h-screen w-full flex items-center pt-20 pl-20">
 
         {/* Background Chiaroscuro Overlay */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-[#131313] via-[#131313]/80 to-transparent z-10"></div>
           <Image
-            src="https://images.unsplash.com/photo-1505682634904-d7c8d95cdc50?q=80&w=2070&auto=format&fit=crop"
+            src="/project-images/typewriter.png"
             alt="Dark Office Vibe"
             fill
             priority
             className="object-cover grayscale brightness-50"
           />
         </div>
-
-
 
         {/* Content Canvas */}
         <div className="relative z-20 w-full max-w-7xl mx-auto px-12 md:px-24 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
@@ -83,10 +181,10 @@ export default function Home() {
               transition={{ duration: 1 }}
               className="flex flex-col">
               <span className="text-[#e9c349] tracking-[0.5em] text-sm mb-4 font-bold uppercase">
-                Full-Stack Software Developer
+                {siteConfig.role}
               </span>
               <h1 className="font-serif text-[6rem] md:text-[9rem] lg:text-[11rem] leading-[0.85] tracking-tight text-[#e5e2e1] uppercase drop-shadow-2xl">
-                D. SAVALIYA
+                {siteConfig.short_name}
               </h1>
             </motion.div>
 
@@ -96,7 +194,7 @@ export default function Home() {
               transition={{ duration: 1, delay: 0.5 }}
               className="max-w-md border-l-4 border-[#8b0000] pl-8 py-4 bg-[#0e0e0e]/40 backdrop-blur-sm mt-4">
               <p className="text-[#e5e2e1]/80 text-lg leading-relaxed font-light italic">
-                {`"I build systems thet can rely on. My code is the ledger of secure APIs, clean architecture, and unbreakable backends."`}
+                {`"I build systems they can rely on. My code is the ledger of secure APIs, clean architecture, and unbreakable backends."`}
               </p>
             </motion.div>
 
@@ -104,18 +202,21 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 1 }}
-              className="flex flex-wrap items-center gap-8 mt-8">
-              <button className="bg-[#8b0000] text-[#e5e2e1] hover:bg-[#a30000] transition-colors px-10 py-4 text-sm md:text-base font-bold tracking-widest uppercase active:scale-95">
-                Enter The Family
-              </button>
-              <button className="text-[#e9c349] border-b border-[#e9c349]/30 hover:border-[#e9c349] transition-all px-2 py-4 text-xs md:text-sm font-bold tracking-widest uppercase">
-                View Dossiers
-              </button>
+              className="flex flex-wrap items-center gap-8 mt-8"
+            >
+              <a href="#contact">
+                <button className="bg-[#8b0000] text-[#e5e2e1] hover:bg-[#a30000] transition-colors px-10 py-4 text-sm md:text-base font-bold tracking-widest uppercase active:scale-95">
+                  Enter The Family
+                </button>
+              </a>
+
+              <a href="#archive">
+                <button className="text-[#e9c349] border-b border-[#e9c349]/30 hover:border-[#e9c349] transition-all px-2 py-4 text-xs md:text-sm font-bold tracking-widest uppercase">
+                  View Dossiers
+                </button>
+              </a>
             </motion.div>
           </div>
-
-
-
 
           {/* Right Side Stats */}
           <motion.div
@@ -125,22 +226,19 @@ export default function Home() {
             className="hidden md:flex md:col-span-4 flex-col gap-12 items-end justify-center">
             <div className="text-right flex flex-col gap-1">
               <span className="text-[#af8d11] text-xs font-bold tracking-widest camelcase">Coordinates</span>
-              <span className="text-[#e5e2e1] font-serif text-3xl">Paderborn, DE</span>
+              <span className="text-[#e5e2e1] font-serif text-3xl">{siteConfig.location}</span>
             </div>
             <div className="text-right flex flex-col gap-1">
               <span className="text-[#af8d11] text-xs font-bold tracking-widest camelcase">Framework</span>
-              <span className="text-[#e5e2e1] font-serif text-3xl">Spring / React</span>
+              <span className="text-[#e5e2e1] font-serif text-3xl">{siteConfig.framework}</span>
             </div>
             <div className="text-right flex flex-col gap-1">
               <span className="text-[#af8d11] text-xs font-bold tracking-widest camelcase">Status</span>
-              <span className="text-[#e9c349] font-serif text-3xl camelcase">Untouchable</span>
+              <span className="text-[#e9c349] font-serif text-3xl camelcase">{siteConfig.status}</span>
             </div>
           </motion.div>
 
         </div>
-
-
-
 
         {/* Bottom Narrative Bar */}
         <div className="absolute bottom-12 right-12 z-20 hidden md:flex items-center gap-6">
@@ -149,9 +247,6 @@ export default function Home() {
         </div>
 
       </main>
-
-
-
 
       {/* --- THE ARCHIVE (BENTO GRID) --- */}
       <section id="archive" className="relative z-20 w-full max-w-7xl mx-auto px-12 md:px-24 py-32 pl-20 md:pl-32">
@@ -183,18 +278,14 @@ export default function Home() {
               {`"A man who doesn't spend time with his projects can never be a real developer."`}
             </p>
           </motion.div>
-
-
         </header>
-
-
-
 
         {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 auto-rows-[300px] md:auto-rows-[400px]">
 
-          {/* Dossier 01 - Large Lead */}
+          {/* Dossier 01 - Large Lead: SecAI */}
           <motion.div
+            onClick={() => setActiveDossier("secai")}
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -203,29 +294,30 @@ export default function Home() {
           >
             <div
               className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105 grayscale group-hover:grayscale-0"
-              style={{ backgroundImage: "url('https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=1200&auto=format&fit=crop')" }}
+              style={{ backgroundImage: `url('${dossierData.secai.image}')` }}
             ></div>
             <div className="absolute inset-0 bg-gradient-to-t from-[#131313] via-[#131313]/60 to-transparent"></div>
 
             <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full flex justify-between items-end">
-              <div>
+              <div className="max-w-xl">
                 <span className="text-[#e9c349] text-xs font-bold tracking-[0.3em] uppercase block mb-3 font-mono">
-                  Full-Stack Architecture
+                  {"Master's Project / React & Java"}
                 </span>
-                <h3 className="font-serif text-4xl md:text-5xl text-white camelcase">The Spring Liquidation</h3>
+                <h3 className="font-serif text-4xl md:text-5xl text-white camelcase mb-4">{dossierData.secai.title}</h3>
+                <p className="hidden md:block text-[#e5e2e1]/70 font-mono text-sm leading-relaxed">
+                  AI-driven SonarQube plugin integrating Cognicrypt SAST. Engineered to detect vulnerabilities and deploy Quick Fix automations.
+                </p>
               </div>
-              <ArrowRight className="hidden md:block text-[#af8d11] w-10 h-10 group-hover:translate-x-2 transition-transform duration-500" />
+              <ArrowRight className="hidden md:block text-[#af8d11] w-10 h-10 group-hover:translate-x-2 transition-transform duration-500 shrink-0" />
             </div>
             <div className="absolute top-8 right-8 border border-white/20 px-3 py-1 text-[10px] tracking-widest text-white/60 font-mono">
-              FILE_REF: 1947_HV
+              FILE_REF: 2025_SONAR
             </div>
           </motion.div>
 
-
-
-
-          {/* Dossier 02 - Vertical */}
+          {/* Dossier 02 - Vertical: Smart SAMS */}
           <motion.div
+            onClick={() => setActiveDossier("sams")}
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -234,20 +326,21 @@ export default function Home() {
           >
             <div
               className="absolute inset-0 bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
-              style={{ backgroundImage: "url('https://images.unsplash.com/photo-1478144596228-39227568114f?q=80&w=800&auto=format&fit=crop')" }}
+              style={{ backgroundImage: `url('${dossierData.sams.image}')` }}
             ></div>
-            <div className="absolute inset-0 bg-black/50 group-hover:bg-black/20 transition-colors duration-500"></div>
+            <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-colors duration-500"></div>
             <div className="absolute bottom-0 left-0 p-8">
-              <span className="text-[#af8d11] text-[10px] font-bold tracking-[0.2em] uppercase block mb-2 font-mono">API Intelligence</span>
-              <h3 className="font-serif text-3xl text-white camelcase">Intercepted REST Comms</h3>
+              <span className="text-[#af8d11] text-[10px] font-bold tracking-[0.2em] uppercase block mb-2 font-mono">
+                Android / Firebase / PHP
+              </span>
+              <h3 className="font-serif text-3xl text-white camelcase mb-2">{dossierData.sams.title}</h3>
+              <p className="text-[#e5e2e1]/60 font-mono text-xs">Dual-app architecture for automated tracking operations.</p>
             </div>
           </motion.div>
 
-
-
-
-          {/* Dossier 03 - Square */}
+          {/* Dossier 03 - Square: Blog WebApp */}
           <motion.div
+            onClick={() => setActiveDossier("mern")}
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -256,63 +349,65 @@ export default function Home() {
           >
             <div
               className="absolute inset-0 bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
-              style={{ backgroundImage: "url('https://images.unsplash.com/photo-1520114092497-767812f86ab5?q=80&w=800&auto=format&fit=crop')" }}
+              style={{ backgroundImage: `url('${dossierData.mern.image}')` }}
             ></div>
-            <div className="absolute inset-0 bg-black/50 group-hover:bg-black/20 transition-colors duration-500"></div>
+            <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-colors duration-500"></div>
             <div className="absolute bottom-0 left-0 p-8">
-              <span className="text-[#af8d11] text-[10px] font-bold tracking-[0.2em] uppercase block mb-2 font-mono">Android Asset Management</span>
-              <h3 className="font-serif text-3xl text-white camelcase">Vegas Mobile Transfers</h3>
+              <span className="text-[#af8d11] text-[10px] font-bold tracking-[0.2em] uppercase block mb-2 font-mono">
+                MERN Stack / JWT
+              </span>
+              <h3 className="font-serif text-3xl text-white camelcase mb-2">{dossierData.mern.title}</h3>
+              <p className="text-[#e5e2e1]/60 font-mono text-xs">Secure MongoDB & Node.js operations with strict authentication.</p>
             </div>
           </motion.div>
 
-
-
-
-          {/* Dossier 04 - Long Horizontal */}
+          {/* Dossier 04 - Long Horizontal: Neural Networks */}
           <motion.div
+            onClick={() => setActiveDossier("neural")}
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="md:col-span-7 md:row-span-1 group relative overflow-hidden bg-[#1c1b1b] cursor-pointer">
+            className="md:col-span-7 md:row-span-1 group relative overflow-hidden bg-[#1c1b1b] cursor-pointer"
+          >
             <div
               className="absolute inset-0 bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
-              style={{ backgroundImage: "url('https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=1200&auto=format&fit=crop')" }}>
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-[#131313] via-[#131313]/50 to-transparent"></div>
+              style={{ backgroundImage: `url('${dossierData.neural.image}')` }}
+            ></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#131313] via-[#131313]/60 to-transparent"></div>
             <div className="absolute bottom-0 left-0 p-8">
-              <span className="text-[#e9c349] text-xs font-bold tracking-[0.3em] uppercase block mb-2 font-mono">Database Logistics</span>
-              <h3 className="font-serif text-4xl text-white camelcase">The SQL Convoy</h3>
+              <span className="text-[#e9c349] text-xs font-bold tracking-[0.3em] uppercase block mb-2 font-mono">
+                Python / Pandas / NLTK
+              </span>
+              <h3 className="font-serif text-4xl text-white camelcase mb-2">{dossierData.neural.title}</h3>
+              <p className="text-[#e5e2e1]/70 font-mono text-sm max-w-lg">
+                Argument mining and quality assessment achieving 80%+ accuracy across dataset corpuses.
+              </p>
             </div>
           </motion.div>
 
-
-
-
-          {/* Dossier 05 - Small Feature (Redacted) */}
+          {/* Dossier 05 - Small Feature: LIRA / Redacted */}
           <motion.div
+            onClick={() => setActiveDossier("lira")}
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 1, delay: 0.4 }}
-            className="md:col-span-5 md:row-span-1 group relative overflow-hidden bg-[#201f1f] cursor-pointer border-t-2 border-[#8b0000]/30 flex flex-col justify-center p-8 md:p-12 hover:bg-[#2a2a2a] transition-colors duration-500">
+            className="md:col-span-5 md:row-span-1 group relative overflow-hidden bg-[#201f1f] cursor-pointer border-t-2 border-[#8b0000]/30 flex flex-col justify-center p-8 md:p-12 hover:bg-[#2a2a2a] transition-colors duration-500"
+          >
             <Lock className="text-[#af8d11] mb-6 w-10 h-10" />
-            <h3 className="font-serif text-3xl md:text-4xl text-white mb-4 camelcase">Redacted_Case_049</h3>
+            <h3 className="font-serif text-3xl md:text-4xl text-white mb-4 camelcase">REDACTED_LIRA_OPS</h3>
             <p className="text-[#e5e2e1]/60 text-sm leading-relaxed max-w-xs font-mono">
-              Classified operations regarding the microservices expansion. Requires Level 5 clearance and signature from the Consigliere.
+              Classified operations regarding enterprise CMMS backend infrastructure and REST APIs at LIRA Service GmbH.
             </p>
             <div className="mt-8 flex gap-4">
               <span className="bg-[#e9c349] text-[#241a00] text-[10px] px-3 py-1 font-bold tracking-widest uppercase font-mono">CLASSIFIED</span>
-              <span className="bg-[#8b0000] text-[#ff907f] text-[10px] px-3 py-1 font-bold tracking-widest uppercase font-mono">TOP_SECRET</span>
+              <span className="bg-[#8b0000] text-[#ff907f] text-[10px] px-3 py-1 font-bold tracking-widest uppercase font-mono">NDA_ACTIVE</span>
             </div>
           </motion.div>
 
         </div>
       </section>
-
-
-
-
 
       {/* --- THE BACKSTORY (ABOUT ME) --- */}
       <section id="family" className="relative w-full overflow-hidden py-32 border-t border-[#5a403c]/20">
@@ -338,11 +433,11 @@ export default function Home() {
               className="max-w-xl space-y-8"
             >
               <p className="text-xl md:text-2xl font-light leading-relaxed text-[#e5e2e1]/90 italic border-l-2 border-[#8b0000] pl-6">
-                "Architecture, design, and strategy are the three pillars of my operation. Every microservice is a calculated move; every API endpoint is a signed contract."
+                {"Architecture, design, and strategy are the three pillars of my operation. Every microservice is a calculated move; every API endpoint is a signed contract."}
               </p>
 
               <p className="text-lg leading-relaxed text-[#e5e2e1]/70 font-mono">
-                My foundation spans from Gujarat to Paderborn. I specialize in Java, Spring Boot, and enterprise-level system architecture. From developing AI-driven security plugins for SonarQube to optimizing CMMS backends at LIRA Service GmbH, I don't just write code—I build leverage. My role is simple: I am the shadow that ensures the system never fails.
+                {"My foundation spans from Gujarat to Paderborn. I specialize in Java, Spring Boot, and enterprise-level system architecture. From developing AI-driven security plugins for SonarQube to optimizing CMMS backends at LIRA Service GmbH, I don't just write code—I build leverage. My role is simple: I am the shadow that ensures the system never fails."}
               </p>
 
               {/* Key Stats Bento Grid */}
@@ -376,9 +471,10 @@ export default function Home() {
             className="lg:col-span-5 relative h-[600px] w-full border border-[#5a403c]/20"
           >
             <Image
-              src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1000&auto=format&fit=crop"
+              src="/project-images/suit.png"
               alt="The Strategist"
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw" 
               className="object-cover grayscale brightness-75 contrast-125"
             />
             {/* Overlay Gradient for blending */}
@@ -387,12 +483,6 @@ export default function Home() {
 
         </div>
       </section>
-
-
-
-
-
-
 
       {/* --- MAKE AN OFFER (CONTACT) --- */}
       <section id="contact" className="relative z-20 w-full max-w-7xl mx-auto px-12 md:px-24 py-32 pl-24 md:pl-32">
@@ -441,7 +531,7 @@ export default function Home() {
                 <MapPin className="w-4 h-4" /> Territory
               </h3>
               <div className="space-y-2">
-                <p className="text-2xl font-light text-[#e5e2e1]">Paderborn, NRW</p>
+                <p className="text-2xl font-light text-[#e5e2e1]">{siteConfig.location}</p>
                 <p className="text-[#e5e2e1]/60 font-mono text-sm">Germany</p>
               </div>
             </motion.div>
@@ -458,29 +548,9 @@ export default function Home() {
               </h3>
               <div className="space-y-2">
                 <p className="text-xl md:text-2xl font-light text-[#e5e2e1] underline decoration-[#8b0000] decoration-2 underline-offset-8">
-                  secure@dsavaliya.dev
+                  {siteConfig.email}
                 </p>
                 <p className="text-[#e5e2e1]/60 font-mono text-sm mt-4">Priority response for active contracts.</p>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, filter: "blur(10px)" }}
-              whileInView={{ opacity: 1, filter: "blur(0px)" }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.6 }}
-              className="relative group pt-12 hidden md:block"
-            >
-              <div className="aspect-[4/5] bg-[#1c1b1b] overflow-hidden relative">
-                <Image
-                  src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=800&auto=format&fit=crop"
-                  alt="Secure Server"
-                  fill
-                  className="object-cover grayscale opacity-40 group-hover:opacity-60 transition-opacity duration-700"
-                />
-              </div>
-              <div className="absolute -bottom-4 -right-4 p-6 bg-[#0e0e0e] border border-[#5a403c]/30">
-                <ShieldCheck className="w-10 h-10 text-[#e9c349]" />
               </div>
             </motion.div>
           </div>
@@ -544,15 +614,125 @@ export default function Home() {
       {/* --- FOOTER --- */}
       <footer className="relative z-50 w-full bg-[#0e0e0e] border-t border-[#5a403c]/20 py-8 px-12 md:pl-32 flex flex-col md:flex-row justify-between items-center gap-6 mt-20">
         <div className="font-mono text-xs tracking-widest text-[#e5e2e1]/40 uppercase">
-          © {new Date().getFullYear()} D. SAVALIYA. ALL RIGHTS RESERVED.
+          © {new Date().getFullYear()} {siteConfig.short_name}. ALL RIGHTS RESERVED.
         </div>
+
         <div className="flex gap-8">
-          <a href="#" className="font-mono text-xs tracking-widest text-[#e5e2e1]/40 hover:text-[#e9c349] transition-colors uppercase">GitHub</a>
-          <a href="#" className="font-mono text-xs tracking-widest text-[#e5e2e1]/40 hover:text-[#e9c349] transition-colors uppercase">LinkedIn</a>
-          <a href="#" className="font-mono text-xs tracking-widest text-[#e5e2e1]/40 hover:text-[#e9c349] transition-colors uppercase">Clearance</a>
+          <a
+            href={siteConfig.links.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs tracking-widest text-[#e5e2e1]/40 hover:text-[#e9c349] transition-colors uppercase">
+            Source_Code
+          </a>
+          <a
+            href={siteConfig.links.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs tracking-widest text-[#e5e2e1]/40 hover:text-[#e9c349] transition-colors uppercase">
+            The_Network
+          </a>
+          <a
+            href={siteConfig.links.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs tracking-widest text-[#e5e2e1]/40 hover:text-[#e9c349] transition-colors uppercase">
+            Public_Records
+          </a>
         </div>
       </footer>
 
+      {/* --- CLASSIFIED DOSSIER MODAL --- */}
+      <AnimatePresence>
+        {activeDossier && activeData && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-12 bg-[#0e0e0e]/95 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 20, opacity: 0 }}
+              className="bg-[#1c1b1b] border border-[#5a403c]/40 w-full max-w-4xl max-h-[90vh] overflow-y-auto relative flex flex-col md:flex-row"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setActiveDossier(null)}
+                className="absolute top-4 right-4 z-20 text-[#e5e2e1]/50 hover:text-[#e9c349] transition-colors"
+              >
+                <X className="w-8 h-8" />
+              </button>
+
+              {/* Modal Image Left Side (Dynamic Integration) */}
+              <div className={`w-full md:w-2/5 h-[300px] md:h-auto relative hidden md:block ${activeData.isNDA ? 'bg-[#0e0e0e]' : ''}`}>
+                <Image
+                  src={activeData.image}
+                  alt="Project Details"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                  className={`${activeData.isNDA ? 'object-contain scale-[0.7] invert brightness-110 contrast-100' : 'object-cover grayscale brightness-50'}`}
+                />
+                {/* Blending Gradient Overlay for Chiaroscuro effect */}
+                {!activeData.isNDA && (
+                  <div className="absolute inset-0 bg-gradient-to-tr from-[#131313] via-[#131313]/95 to-transparent z-10 pointer-events-none"></div>
+                )}
+              </div>
+
+              {/* Modal Content Right Side */}
+              <div className="w-full md:w-3/5 p-8 md:p-12 flex flex-col font-mono">
+                <span className="text-[#8b0000] text-xs tracking-widest uppercase mb-4 block flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4" /> Security Clearance Verified
+                </span>
+
+                <h3 className="font-serif text-4xl md:text-5xl text-white uppercase mb-8">
+                  {activeData.title}
+                </h3>
+
+                <div className="space-y-6 flex-grow">
+                  <div>
+                    <h4 className="text-[#e9c349] font-mono text-xs tracking-[0.2em] uppercase mb-2">The Objective</h4>
+                    <p className="text-[#e5e2e1]/70 font-mono text-sm leading-relaxed">
+                      {activeData.objective}
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="text-[#e9c349] font-mono text-xs tracking-[0.2em] uppercase mb-2">The Execution</h4>
+                    <p className="text-[#e5e2e1]/70 font-mono text-sm leading-relaxed">
+                      {activeData.execution}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Action Buttons (Handles NDA Case & Missing Links) */}
+                <div className="mt-12 flex flex-wrap gap-6 border-t border-[#5a403c]/20 pt-8">
+                  {activeData.isNDA ? (
+                    <div className="text-[#8b0000] font-mono text-xs font-bold tracking-widest uppercase flex items-center gap-2">
+                      <Lock className="w-4 h-4" /> ACCESS RESTRICTED BY NDA
+                    </div>
+                  ) : (
+                    <>
+                      {activeData.codeLink && (
+                        <a href={activeData.codeLink} target="_blank" rel="noopener noreferrer" className="bg-[#8b0000] text-[#e5e2e1] px-6 py-3 font-mono text-xs font-bold tracking-widest uppercase hover:bg-[#a30000] transition-colors">
+                          Access Code
+                        </a>
+                      )}
+                      {activeData.liveLink && (
+                        <a href={activeData.liveLink} target="_blank" rel="noopener noreferrer" className="text-[#e9c349] border-b border-[#e9c349]/30 hover:border-[#e9c349] transition-all px-2 py-3 font-mono text-xs font-bold tracking-widest uppercase">
+                          Live Environment
+                        </a>
+                      )}
+                    </>
+                  )}
+                </div>
+
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div>
   );
