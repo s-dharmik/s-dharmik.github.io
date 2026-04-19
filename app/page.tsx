@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Archive, BookOpen, Shield, ArrowRight, Lock, MapPin, Mail, ShieldCheck, X, Terminal } from "lucide-react";
+import { Archive, BookOpen, Shield, ArrowRight, Lock, MapPin, Mail, ShieldCheck, X, Terminal, Volume2, VolumeX } from "lucide-react"; 
 import Image from "next/image";
 import { siteConfig } from "./config/site";
 
@@ -83,10 +83,7 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 
 export default function Home() {
   const [activeDossier, setActiveDossier] = useState<DossierKey | null>(null);
-
-  // Helper to grab the currently active data safely
   const activeData = activeDossier ? dossierData[activeDossier] : null;
-
 
   const [activeSection, setActiveSection] = useState("home_page");
 
@@ -94,6 +91,40 @@ export default function Home() {
   const [formStatus, setFormStatus] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // --- AUDIO PROTOCOL STATE & LOGIC ---
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // ADDED: Initialize the audio on client load
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      audioRef.current = new Audio("/ambient-track.mp3");
+      audioRef.current.loop = true; // Loops seamlessly
+      audioRef.current.volume = 0.3; // 30% volume
+    }
+    
+    // Cleanup to prevent memory leaks if they leave
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    };
+  }, []);
+
+  // ADDED: The function that actually plays/pauses the track
+  const toggleAudio = () => {
+    if (!audioRef.current) return;
+
+    if (isAudioPlaying) {
+      audioRef.current.pause();
+      setIsAudioPlaying(false);
+    } else {
+      audioRef.current.play();
+      setIsAudioPlaying(true);
+    }
+  };
+
+  // --- SCROLL SPY LOGIC ---
   useEffect(() => {
     const handleScroll = () => {
       const sections = ["home_page", "archive", "tradecraft", "family", "contact"];
@@ -356,6 +387,22 @@ export default function Home() {
         <div className="absolute bottom-12 right-12 z-20 hidden md:flex items-center gap-6">
           <span className="h-[1px] w-24 bg-[#5a403c]/50"></span>
           <span className="text-[10px] tracking-[0.4em] uppercase text-[#e5e2e1]/40">Keep your friends close, and your data closer.</span>
+        </div>
+
+        <div className="absolute bottom-12 left-12 md:left-20 z-50">
+          <button 
+            onClick={toggleAudio}
+            className="group flex items-center gap-3 text-[#e5e2e1]/40 hover:text-[#e9c349] transition-colors"
+          >
+            {isAudioPlaying ? (
+              <Volume2 className="w-5 h-5 text-[#e9c349]" />
+            ) : (
+              <VolumeX className="w-5 h-5" />
+            )}
+            <span className="font-mono text-[10px] tracking-[0.3em] uppercase opacity-0 group-hover:opacity-100 transition-opacity">
+              {isAudioPlaying ? "MUSIC: ACTIVE" : "MUSIC: MUTED"}
+            </span>
+          </button>
         </div>
 
       </main>
