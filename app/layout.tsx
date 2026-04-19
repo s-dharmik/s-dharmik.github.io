@@ -23,7 +23,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${specialElite.variable} ${courier.variable} font-serif antialiased`}>
+      <body className={`${specialElite.variable} ${courier.variable} font-serif antialiased`} suppressHydrationWarning>
         
         <div className="film-grain"></div>
         

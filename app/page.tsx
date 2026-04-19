@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Archive, BookOpen, Shield, ArrowRight, Lock, MapPin, Mail, ShieldCheck, X } from "lucide-react";
+import { Archive, BookOpen, Shield, ArrowRight, Lock, MapPin, Mail, ShieldCheck, X, Terminal } from "lucide-react";
 import Image from "next/image";
 import { siteConfig } from "./config/site";
 
@@ -52,6 +52,36 @@ const dossierData: Record<DossierKey, { title: string, objective: string, execut
   }
 };
 
+
+
+
+
+// --- BRAND ICON COMPONENTS (LUCIDE-COMPATIBLE) ---
+const GithubIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+    <path d="M9 18c-4.51 2-5-2-7-2" />
+  </svg>
+);
+
+const LinkedinIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+    <rect width="4" height="12" x="2" y="9" />
+    <circle cx="4" cy="4" r="2" />
+  </svg>
+);
+
+const InstagramIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+);
+
+
+
 export default function Home() {
   const [activeDossier, setActiveDossier] = useState<DossierKey | null>(null);
 
@@ -59,12 +89,16 @@ export default function Home() {
   const activeData = activeDossier ? dossierData[activeDossier] : null;
 
 
-  const [activeSection, setActiveSection] = useState("hero_page");
+  const [activeSection, setActiveSection] = useState("home_page");
+
+  // --- WEB3FORMS STATE ---
+  const [formStatus, setFormStatus] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["hero_page", "archive", "family", "contact"];
-      let current = "hero_page";
+      const sections = ["home_page", "archive", "tradecraft", "family", "contact"];
+      let current = "home_page";
 
       for (const section of sections) {
         const element = document.getElementById(section);
@@ -91,6 +125,62 @@ export default function Home() {
   };
 
 
+
+
+
+
+  // Added the entire form handling logic
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setFormStatus("Encrypting Transmission...");
+
+    const formElement = event.currentTarget;
+    const formData = new FormData(formElement);
+    
+    // Grabbing the secret key from your .env.local file
+    const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
+    
+    if (!accessKey) {
+      console.error("Missing Web3Forms Access Key in environment variables.");
+      setFormStatus("System Error: Missing Credentials.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    formData.append("access_key", accessKey);
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setFormStatus("Proposition Accepted.");
+        formElement.reset();
+      } else {
+        console.error("Error submitting form:", data);
+        setFormStatus("Transmission Failed. Try again.");
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+      setFormStatus("Network Interference. Try again.");
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setFormStatus(null), 5000);
+    }
+  };
+
+
+
+
+
+
+
+
   return (
     <div className="bg-[#131313] text-[#e5e2e1] font-mono selection:bg-[#8b0000] selection:text-[#ff907f] min-h-screen overflow-x-hidden">
 
@@ -114,11 +204,11 @@ export default function Home() {
       <aside className="fixed left-0 top-0 h-full z-40 flex flex-col bg-[#0e0e0e] w-20 hover:w-64 transition-all duration-500 group border-r border-[#5a403c]/15 overflow-hidden">
         <div className="flex flex-col h-full py-32 gap-8">
           <a
-            href="#hero_page"
-            onClick={(e) => scrollToSection(e, "hero_page")}
+            href="#home_page"
+            onClick={(e) => scrollToSection(e, "home_page")}
             className="flex items-center px-6 gap-4 group-hover:pl-8 transition-all duration-300">
-            <Shield className={`${activeSection === "hero_page" ? "text-[#e9c349]" : "text-[#e5e2e1]/50"} w-6 h-6 shrink-0 hover:text-[#e9c349] transition-colors`} />
-            <span className={`opacity-0 group-hover:opacity-100 text-xs font-bold tracking-widest uppercase whitespace-nowrap transition-all duration-300 delay-100 ${activeSection === "hero_page" ? "text-[#e9c349]" : "text-[#e5e2e1]/50"}`}>
+            <Shield className={`${activeSection === "home_page" ? "text-[#e9c349]" : "text-[#e5e2e1]/50"} w-6 h-6 shrink-0 hover:text-[#e9c349] transition-colors`} />
+            <span className={`opacity-0 group-hover:opacity-100 text-xs font-bold tracking-widest uppercase whitespace-nowrap transition-all duration-300 delay-100 ${activeSection === "home_page" ? "text-[#e9c349]" : "text-[#e5e2e1]/50"}`}>
               Command
             </span>
           </a>
@@ -130,6 +220,17 @@ export default function Home() {
             <Archive className={`${activeSection === "archive" ? "text-[#e9c349]" : "text-[#e5e2e1]/50"} w-6 h-6 shrink-0 hover:text-[#e9c349] transition-colors`} />
             <span className={`opacity-0 group-hover:opacity-100 text-xs font-bold tracking-widest uppercase whitespace-nowrap transition-all duration-300 delay-100 ${activeSection === "archive" ? "text-[#e9c349]" : "text-[#e5e2e1]/50"}`}>
               The Vault
+            </span>
+          </a>
+
+
+          <a
+            href="#tradecraft"
+            onClick={(e) => scrollToSection(e, "tradecraft")}
+            className="flex items-center px-6 gap-4 group-hover:pl-8 transition-all duration-300">
+            <Terminal className={`${activeSection === "tradecraft" ? "text-[#e9c349]" : "text-[#e5e2e1]/50"} w-6 h-6 shrink-0 hover:text-[#e9c349] transition-colors`} />
+            <span className={`opacity-0 group-hover:opacity-100 text-xs font-bold tracking-widest uppercase whitespace-nowrap transition-all duration-300 delay-100 ${activeSection === "tradecraft" ? "text-[#e9c349]" : "text-[#e5e2e1]/50"}`}>
+              Tradecraft
             </span>
           </a>
 
@@ -409,6 +510,117 @@ export default function Home() {
         </div>
       </section>
 
+
+
+
+
+
+      {/* --- TRADECRAFT (SKILLS) --- */}
+      <section id="tradecraft" className="relative z-20 w-full max-w-7xl mx-auto px-12 md:px-24 py-32 pl-20 md:pl-32 border-t border-[#5a403c]/20">
+        <header className="mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1 }}
+          >
+            <span className="text-[#af8d11] font-mono text-xs tracking-[0.4em] uppercase mb-4 block flex items-center gap-3">
+              <Terminal className="w-4 h-4" /> Operational Capabilities
+            </span>
+            <h2 className="font-serif text-6xl md:text-8xl text-[#e5e2e1] leading-none tracking-tight camelcase">
+              Tradecraft
+            </h2>
+          </motion.div>
+        </header>
+
+        {/* The Ledger Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+          
+          {/* Column 1: Core Languages */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.1 }}
+            className="border-l border-[#8b0000]/50 pl-6 space-y-6"
+          >
+            <h3 className="font-mono text-sm tracking-[0.3em] text-[#e9c349] uppercase">Syntax & Linguistics</h3>
+            <ul className="space-y-4 font-mono text-[#e5e2e1]/80 text-sm">
+              <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
+                <span>Java</span> <span className="text-[#af8d11]">Level_05</span>
+              </li>
+              <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
+                <span>Python</span> <span className="text-[#af8d11]">Level_04</span>
+              </li>
+              <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
+                <span>TypeScript / JS</span> <span className="text-[#af8d11]">Level_04</span>
+              </li>
+              <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
+                <span>SQL</span> <span className="text-[#af8d11]">Level_05</span>
+              </li>
+            </ul>
+          </motion.div>
+
+          {/* Column 2: Frameworks */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="border-l border-[#8b0000]/50 pl-6 space-y-6"
+          >
+            <h3 className="font-mono text-sm tracking-[0.3em] text-[#e9c349] uppercase">Infrastructure</h3>
+            <ul className="space-y-4 font-mono text-[#e5e2e1]/80 text-sm">
+              <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
+                <span>Spring Boot</span> <span className="text-[#af8d11]">Active</span>
+              </li>
+              <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
+                <span>React.js / Next.js</span> <span className="text-[#af8d11]">Active</span>
+              </li>
+              <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
+                <span>Node.js / Express</span> <span className="text-[#af8d11]">Active</span>
+              </li>
+              <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
+                <span>Android SDK</span> <span className="text-[#e5e2e1]/40">Standby</span>
+              </li>
+            </ul>
+          </motion.div>
+
+          {/* Column 3: Tools & Deployment */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="border-l border-[#8b0000]/50 pl-6 space-y-6"
+          >
+            <h3 className="font-mono text-sm tracking-[0.3em] text-[#e9c349] uppercase">Field Equipment</h3>
+            <ul className="space-y-4 font-mono text-[#e5e2e1]/80 text-sm">
+              <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
+                <span>Docker & CI/CD</span> <span className="text-[#af8d11]">Verified</span>
+              </li>
+              <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
+                <span>SonarQube / Cognicrypt</span> <span className="text-[#af8d11]">Verified</span>
+              </li>
+              <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
+                <span>Git / GitHub</span> <span className="text-[#af8d11]">Verified</span>
+              </li>
+              <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
+                <span>MongoDB & Oracle</span> <span className="text-[#af8d11]">Verified</span>
+              </li>
+            </ul>
+          </motion.div>
+
+        </div>
+      </section>
+
+
+
+
+
+
+
+
       {/* --- THE BACKSTORY (ABOUT ME) --- */}
       <section id="family" className="relative w-full overflow-hidden py-32 border-t border-[#5a403c]/20">
         <div className="max-w-7xl mx-auto px-12 md:px-24 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
@@ -563,7 +775,7 @@ export default function Home() {
             transition={{ duration: 1, delay: 0.4 }}
             className="lg:col-span-8 bg-[#0e0e0e] p-8 md:p-16 border-l border-[#5a403c]/20"
           >
-            <form className="space-y-12" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-12" onSubmit={handleFormSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
 
                 {/* Field: The Name */}
@@ -571,6 +783,8 @@ export default function Home() {
                   <label className="font-mono text-xs tracking-widest text-[#e5e2e1]/40 uppercase group-focus-within:text-[#e9c349] transition-colors">The Name</label>
                   <input
                     type="text"
+                    name="name"
+                    required
                     placeholder="WHO IS ASKING?"
                     className="w-full bg-transparent border-t-0 border-x-0 border-b border-[#5a403c]/30 py-4 focus:ring-0 focus:border-[#e9c349] transition-all placeholder:text-[#e5e2e1]/10 uppercase tracking-widest text-lg outline-none text-[#e5e2e1]"
                   />
@@ -581,6 +795,8 @@ export default function Home() {
                   <label className="font-mono text-xs tracking-widest text-[#e5e2e1]/40 uppercase group-focus-within:text-[#e9c349] transition-colors">The Contact</label>
                   <input
                     type="email"
+                    name="email" 
+                    required
                     placeholder="WHERE DO WE REACH YOU?"
                     className="w-full bg-transparent border-t-0 border-x-0 border-b border-[#5a403c]/30 py-4 focus:ring-0 focus:border-[#e9c349] transition-all placeholder:text-[#e5e2e1]/10 uppercase tracking-widest text-lg outline-none text-[#e5e2e1]"
                   />
@@ -591,21 +807,45 @@ export default function Home() {
               <div className="space-y-2 group relative">
                 <label className="font-mono text-xs tracking-widest text-[#e5e2e1]/40 uppercase group-focus-within:text-[#e9c349] transition-colors">The Business</label>
                 <textarea
+                  name="message" 
+                  required
                   rows={4}
                   placeholder="WHAT IS YOUR PROPOSITION?"
                   className="w-full bg-transparent border-t-0 border-x-0 border-b border-[#5a403c]/30 py-4 focus:ring-0 focus:border-[#e9c349] transition-all placeholder:text-[#e5e2e1]/10 uppercase tracking-widest text-lg resize-none outline-none text-[#e5e2e1]"
                 ></textarea>
               </div>
 
+
+              <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
+
               <div className="pt-8 flex flex-col xl:flex-row items-center justify-between gap-8">
                 <div className="flex items-center gap-4 text-[#e5e2e1]/40 text-xs tracking-widest font-mono">
                   <ShieldCheck className="text-[#8b0000] w-5 h-5" />
                   ENCRYPTED VIA OMERTA PROTOCOL
                 </div>
-                <button type="submit" className="w-full xl:w-auto px-12 py-5 bg-[#8b0000] text-[#e5e2e1] font-mono font-bold tracking-[0.2em] uppercase hover:bg-[#a30000] transition-colors active:scale-95">
-                  Submit Proposition
-                </button>
+                
+                {/* CHANGED: Wrapped button in a div to hold the status message */}
+                <div className="w-full xl:w-auto flex flex-col items-end gap-2">
+                  <button 
+                    type="submit" 
+                    // NEW: Disables button and changes styling while submitting
+                    disabled={isSubmitting} 
+                    className="w-full xl:w-auto px-12 py-5 bg-[#8b0000] text-[#e5e2e1] font-mono font-bold tracking-[0.2em] uppercase hover:bg-[#a30000] disabled:bg-[#5a403c] disabled:cursor-not-allowed transition-colors active:scale-95">
+                    { /* Button text changes based on state */ }
+                    {isSubmitting ? "Transmitting..." : "Submit Proposition"}
+                  </button>
+                  
+                  {/* NEW: Displays the success/error message */}
+                  {formStatus && (
+                    <span className={`text-xs tracking-widest font-mono uppercase ${formStatus.includes("Accepted") ? "text-[#e9c349]" : "text-[#e5e2e1]/60"}`}>
+                      {formStatus}
+                    </span>
+                  )}
+
+
+                </div>
               </div>
+
             </form>
           </motion.div>
         </div>
@@ -617,26 +857,32 @@ export default function Home() {
           © {new Date().getFullYear()} {siteConfig.short_name}. ALL RIGHTS RESERVED.
         </div>
 
-        <div className="flex gap-8">
+        <div className="flex flex-wrap gap-8">
           <a
             href={siteConfig.links.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs tracking-widest text-[#e5e2e1]/40 hover:text-[#e9c349] transition-colors uppercase">
+            className="flex items-center gap-2 text-xs tracking-widest text-[#e5e2e1]/40 hover:text-[#e9c349] transition-colors uppercase group"
+          >
+            <GithubIcon className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
             Source_Code
           </a>
           <a
             href={siteConfig.links.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs tracking-widest text-[#e5e2e1]/40 hover:text-[#e9c349] transition-colors uppercase">
+            className="flex items-center gap-2 text-xs tracking-widest text-[#e5e2e1]/40 hover:text-[#e9c349] transition-colors uppercase group"
+          >
+            <LinkedinIcon className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
             The_Network
           </a>
           <a
             href={siteConfig.links.instagram}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs tracking-widest text-[#e5e2e1]/40 hover:text-[#e9c349] transition-colors uppercase">
+            className="flex items-center gap-2 text-xs tracking-widest text-[#e5e2e1]/40 hover:text-[#e9c349] transition-colors uppercase group"
+          >
+            <InstagramIcon className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
             Public_Records
           </a>
         </div>
