@@ -662,7 +662,7 @@ export default function Home() {
               </p>
 
               <p className="text-lg leading-relaxed text-[#e5e2e1]/70 font-mono">
-                {"My foundation spans from Gujarat to Paderborn. I specialize in Java, Spring Boot, and enterprise-level system architecture. From developing AI-driven security plugins for SonarQube to optimizing CMMS backends at LIRA Service GmbH, I don't just write code—I build leverage. My role is simple: I am the shadow that ensures the system never fails."}
+                {"My foundation spans from Gujarat to Paderborn. I specialize in Java, Spring Boot, and enterprise-level system architecture. From developing AI-driven security plugins for SonarQube to optimizing CMMS backends at LIRA Service GmbH, I don't just write code - I build leverage. My role is simple: I am the shadow that ensures the system never fails."}
               </p>
 
               {/* Key Stats Bento Grid */}
