@@ -17,7 +17,6 @@ const dossierData: Record<DossierKey, { title: string, objective: string, execut
     execution: "Java, React.js, Docker, SonarQube, Ubuntu, GitHub, VM, CI/CD. Designed automated test scenarios using JUnit5, achieving 57% backend code coverage.",
     image: "/project-images/secai.webp",
     isNDA: false,
-    codeLink: "https://github.com/secure-software-engineering/SonarQubePlugin",
   },
   sams: {
     title: "Smart S.A.M.S.",
