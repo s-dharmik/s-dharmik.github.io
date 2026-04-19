@@ -137,10 +137,10 @@ export default function Home() {
 
     const formElement = event.currentTarget;
     const formData = new FormData(formElement);
-    
+
     // Grabbing the secret key from your .env.local file
     const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
-    
+
     if (!accessKey) {
       console.error("Missing Web3Forms Access Key in environment variables.");
       setFormStatus("System Error: Missing Credentials.");
@@ -201,7 +201,7 @@ export default function Home() {
       </nav>
 
       {/* --- SIDE NAV BAR (Dynamic Scroll Spy) --- */}
-      <aside className="fixed left-0 top-0 h-full z-40 flex flex-col bg-[#0e0e0e] w-20 hover:w-64 transition-all duration-500 group border-r border-[#5a403c]/15 overflow-hidden">
+      <aside className="hidden md:flex fixed left-0 top-0 h-full z-40 flex-col bg-[#0e0e0e] w-20 hover:w-64 transition-all duration-500 group border-r border-[#5a403c]/15 overflow-hidden">
         <div className="flex flex-col h-full py-32 gap-8">
           <a
             href="#home_page"
@@ -258,7 +258,7 @@ export default function Home() {
       </aside>
 
       {/* --- MAIN HERO SECTION --- */}
-      <main id="home_page" className="relative min-h-screen w-full flex items-center pt-20 pl-20">
+      <main id="home_page" className="relative min-h-screen w-full flex items-center pt-24 pb-12 md:pl-20">
 
         {/* Background Chiaroscuro Overlay */}
         <div className="absolute inset-0 z-0 overflow-hidden">
@@ -295,7 +295,7 @@ export default function Home() {
               transition={{ duration: 1, delay: 0.5 }}
               className="max-w-md border-l-4 border-[#8b0000] pl-8 py-4 bg-[#0e0e0e]/40 backdrop-blur-sm mt-4">
               <p className="text-[#e5e2e1]/80 text-lg leading-relaxed font-light italic">
-                {`"I build systems they can rely on. My code is the ledger of secure APIs, clean architecture, and unbreakable backends."`}
+                {`"I build systems you can rely on. My code is the ledger of secure APIs, clean architecture, and unbreakable backends."`}
               </p>
             </motion.div>
 
@@ -309,6 +309,18 @@ export default function Home() {
                 <button className="bg-[#8b0000] text-[#e5e2e1] hover:bg-[#a30000] transition-colors px-10 py-4 text-sm md:text-base font-bold tracking-widest uppercase active:scale-95">
                   Enter The Family
                 </button>
+              </a>
+
+
+              <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="relative group">
+               <button className="border border-[#5a403c] text-[#e5e2e1]/80 hover:border-[#e9c349] hover:text-[#e9c349] transition-all px-6 py-4 text-xs md:text-sm font-bold tracking-widest uppercase flex items-center gap-2">
+                  <Archive className="w-4 h-4" /> Extract Record
+                </button>
+
+                <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[#0e0e0e] text-[#e9c349] font-mono text-[10px] tracking-widest px-3 py-2 border border-[#e9c349]/30 whitespace-nowrap pointer-events-none z-50">
+                  [ INITIATE RESUME DOWNLOAD ]
+                </span>
+
               </a>
 
               <a href="#archive">
@@ -350,7 +362,7 @@ export default function Home() {
       </main>
 
       {/* --- THE ARCHIVE (BENTO GRID) --- */}
-      <section id="archive" className="relative z-20 w-full max-w-7xl mx-auto px-12 md:px-24 py-32 pl-20 md:pl-32">
+      <section id="archive" className="relative z-20 w-full max-w-7xl mx-auto px-8 md:px-24 py-24 md:py-32 md:pl-32">
 
         {/* Section Header */}
         <header className="mb-16 flex flex-col md:flex-row justify-between items-end gap-8">
@@ -516,7 +528,7 @@ export default function Home() {
 
 
       {/* --- TRADECRAFT (SKILLS) --- */}
-      <section id="tradecraft" className="relative z-20 w-full max-w-7xl mx-auto px-12 md:px-24 py-32 pl-20 md:pl-32 border-t border-[#5a403c]/20">
+      <section id="tradecraft" className="relative z-20 w-full max-w-7xl mx-auto px-8 md:px-24 py-24 md:py-32 md:pl-32 border-t border-[#5a403c]/20">
         <header className="mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -533,9 +545,10 @@ export default function Home() {
           </motion.div>
         </header>
 
+
         {/* The Ledger Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
-          
+
           {/* Column 1: Core Languages */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -547,21 +560,21 @@ export default function Home() {
             <h3 className="font-mono text-sm tracking-[0.3em] text-[#e9c349] uppercase">Syntax & Linguistics</h3>
             <ul className="space-y-4 font-mono text-[#e5e2e1]/80 text-sm">
               <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
-                <span>Java</span> <span className="text-[#af8d11]">Level_05</span>
+                <span>Java</span> <span className="text-[#af8d11]">Advanced</span>
               </li>
               <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
-                <span>Python</span> <span className="text-[#af8d11]">Level_04</span>
+                <span>SQL</span> <span className="text-[#af8d11]">Advanced</span>
               </li>
               <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
-                <span>TypeScript / JS</span> <span className="text-[#af8d11]">Level_04</span>
+                <span>Python</span> <span className="text-[#af8d11]">Proficient</span>
               </li>
               <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
-                <span>SQL</span> <span className="text-[#af8d11]">Level_05</span>
+                <span>JavaScript / HTML5</span> <span className="text-[#af8d11]">Proficient</span>
               </li>
             </ul>
           </motion.div>
 
-          {/* Column 2: Frameworks */}
+          {/* Column 2: Frameworks & Architecture */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -572,21 +585,21 @@ export default function Home() {
             <h3 className="font-mono text-sm tracking-[0.3em] text-[#e9c349] uppercase">Infrastructure</h3>
             <ul className="space-y-4 font-mono text-[#e5e2e1]/80 text-sm">
               <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
-                <span>Spring Boot</span> <span className="text-[#af8d11]">Active</span>
+                <span>Spring Boot & JPA</span> <span className="text-[#af8d11]">Production</span>
               </li>
               <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
-                <span>React.js / Next.js</span> <span className="text-[#af8d11]">Active</span>
+                <span>React.js / Node.js</span> <span className="text-[#af8d11]">Production</span>
               </li>
               <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
-                <span>Node.js / Express</span> <span className="text-[#af8d11]">Active</span>
+                <span>REST & Microservices</span> <span className="text-[#af8d11]">Production</span>
               </li>
               <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
-                <span>Android SDK</span> <span className="text-[#e5e2e1]/40">Standby</span>
+                <span>Android SDK / SWT</span> <span className="text-[#e5e2e1]/40">Prior Use</span>
               </li>
             </ul>
           </motion.div>
 
-          {/* Column 3: Tools & Deployment */}
+          {/* Column 3: Tools, DBs, & Deployment */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -597,21 +610,22 @@ export default function Home() {
             <h3 className="font-mono text-sm tracking-[0.3em] text-[#e9c349] uppercase">Field Equipment</h3>
             <ul className="space-y-4 font-mono text-[#e5e2e1]/80 text-sm">
               <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
-                <span>Docker & CI/CD</span> <span className="text-[#af8d11]">Verified</span>
+                <span>Docker & CI/CD</span> <span className="text-[#af8d11]">Daily Use</span>
               </li>
               <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
-                <span>SonarQube / Cognicrypt</span> <span className="text-[#af8d11]">Verified</span>
+                <span>Oracle & MongoDB</span> <span className="text-[#af8d11]">Proficient</span>
               </li>
               <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
-                <span>Git / GitHub</span> <span className="text-[#af8d11]">Verified</span>
+                <span>Git & GitHub Actions</span> <span className="text-[#af8d11]">Daily Use</span>
               </li>
               <li className="flex justify-between border-b border-[#5a403c]/20 pb-2">
-                <span>MongoDB & Oracle</span> <span className="text-[#af8d11]">Verified</span>
+                <span>Linux & Postman</span> <span className="text-[#af8d11]">Standard</span>
               </li>
             </ul>
           </motion.div>
 
         </div>
+
       </section>
 
 
@@ -622,8 +636,8 @@ export default function Home() {
 
 
       {/* --- THE BACKSTORY (ABOUT ME) --- */}
-      <section id="family" className="relative w-full overflow-hidden py-32 border-t border-[#5a403c]/20">
-        <div className="max-w-7xl mx-auto px-12 md:px-24 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+      <section id="family" className="relative w-full overflow-hidden py-24 md:py-32 border-t border-[#5a403c]/20">
+        <div className="max-w-7xl mx-auto px-8 md:px-24 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
 
           {/* Left Content: The Narrative */}
           <div className="lg:col-span-7 flex flex-col z-10">
@@ -686,7 +700,7 @@ export default function Home() {
               src="/project-images/suit.png"
               alt="The Strategist"
               fill
-              sizes="(max-width: 1024px) 100vw, 50vw" 
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover grayscale brightness-75 contrast-125"
             />
             {/* Overlay Gradient for blending */}
@@ -697,7 +711,7 @@ export default function Home() {
       </section>
 
       {/* --- MAKE AN OFFER (CONTACT) --- */}
-      <section id="contact" className="relative z-20 w-full max-w-7xl mx-auto px-12 md:px-24 py-32 pl-24 md:pl-32">
+      <section id="contact" className="relative z-20 w-full max-w-7xl mx-auto px-8 md:px-24 py-24 md:py-32 md:pl-32">
 
         {/* Header Section */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-end mb-20">
@@ -795,7 +809,7 @@ export default function Home() {
                   <label className="font-mono text-xs tracking-widest text-[#e5e2e1]/40 uppercase group-focus-within:text-[#e9c349] transition-colors">The Contact</label>
                   <input
                     type="email"
-                    name="email" 
+                    name="email"
                     required
                     placeholder="WHERE DO WE REACH YOU?"
                     className="w-full bg-transparent border-t-0 border-x-0 border-b border-[#5a403c]/30 py-4 focus:ring-0 focus:border-[#e9c349] transition-all placeholder:text-[#e5e2e1]/10 uppercase tracking-widest text-lg outline-none text-[#e5e2e1]"
@@ -807,7 +821,7 @@ export default function Home() {
               <div className="space-y-2 group relative">
                 <label className="font-mono text-xs tracking-widest text-[#e5e2e1]/40 uppercase group-focus-within:text-[#e9c349] transition-colors">The Business</label>
                 <textarea
-                  name="message" 
+                  name="message"
                   required
                   rows={4}
                   placeholder="WHAT IS YOUR PROPOSITION?"
@@ -823,18 +837,18 @@ export default function Home() {
                   <ShieldCheck className="text-[#8b0000] w-5 h-5" />
                   ENCRYPTED VIA OMERTA PROTOCOL
                 </div>
-                
+
                 {/* CHANGED: Wrapped button in a div to hold the status message */}
                 <div className="w-full xl:w-auto flex flex-col items-end gap-2">
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     // NEW: Disables button and changes styling while submitting
-                    disabled={isSubmitting} 
+                    disabled={isSubmitting}
                     className="w-full xl:w-auto px-12 py-5 bg-[#8b0000] text-[#e5e2e1] font-mono font-bold tracking-[0.2em] uppercase hover:bg-[#a30000] disabled:bg-[#5a403c] disabled:cursor-not-allowed transition-colors active:scale-95">
-                    { /* Button text changes based on state */ }
+                    { /* Button text changes based on state */}
                     {isSubmitting ? "Transmitting..." : "Submit Proposition"}
                   </button>
-                  
+
                   {/* NEW: Displays the success/error message */}
                   {formStatus && (
                     <span className={`text-xs tracking-widest font-mono uppercase ${formStatus.includes("Accepted") ? "text-[#e9c349]" : "text-[#e5e2e1]/60"}`}>
@@ -852,7 +866,7 @@ export default function Home() {
       </section>
 
       {/* --- FOOTER --- */}
-      <footer className="relative z-50 w-full bg-[#0e0e0e] border-t border-[#5a403c]/20 py-8 px-12 md:pl-32 flex flex-col md:flex-row justify-between items-center gap-6 mt-20">
+      <footer className="relative z-50 w-full bg-[#0e0e0e] border-t border-[#5a403c]/20 py-8 px-8 md:px-12 md:pl-32 flex flex-col md:flex-row justify-between items-center gap-6 mt-20">
         <div className="font-mono text-xs tracking-widest text-[#e5e2e1]/40 uppercase">
           © {new Date().getFullYear()} {siteConfig.short_name}. ALL RIGHTS RESERVED.
         </div>

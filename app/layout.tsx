@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Pirata_One, Roboto } from "next/font/google";
 import "./globals.css";
 
@@ -15,9 +16,26 @@ const courier = Roboto({
   variable: '--font-courier'
 });
 
-export const metadata = {
-  title: "Dharmik Savaliya",
-  description: "a Full-Stack Software Developer ",
+export const metadata: Metadata = {
+  title: "Dharmik Savaliya | Software Developer",
+  description: "Full-Stack Software Developer specializing in Java, Spring Boot, and Clean Architecture. Exploring the intersection of backend scalability and secure integrations.",
+  keywords: ["Java", "Spring Boot", "Software Engineer", "React", "Next.js", "Full Stack", "Paderborn", "Dharmik Savaliya"],
+  openGraph: {
+    title: "Dharmik Savaliya | Confidential Records",
+    description: "Enterprise Software Engineer | Java & Clean Architecture.",
+    url: "https://your-domain-name.com", // ⚠️ REMINDER: Update this when you host the site
+    siteName: "Dharmik's Dossier",
+    images: [
+      {
+        url: "/project-images/typewriter.png", // Uses your background as the link preview! 
+        width: 1200,
+        height: 630,
+        alt: "Dharmik Savaliya - Software Engineer Portfolio",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -25,6 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${specialElite.variable} ${courier.variable} font-serif antialiased`} suppressHydrationWarning>
         
+        {/* Cinematic aesthetic overlay */}
         <div className="film-grain"></div>
         
         {children}
